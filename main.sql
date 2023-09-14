@@ -109,3 +109,14 @@ select * from patients
                         	patient_id % 2 != 0
 
 /*Show the percent of patients that have 'M' as their gender. Round the answer to the nearest hundreth number and in percent form. */
+
+/*For each day display the total amount of admissions on that day. Display the amount changed from the previous date. */
+WITH temptable AS (
+	select admission_date,
+	   count(*) AS admission_day
+	from admissions
+  	group by admission_date
+)
+select admission_date, admission_day, admission_day - LAG(admission_day,1)
+	OVER() admission_count_change
+    	from temptable
