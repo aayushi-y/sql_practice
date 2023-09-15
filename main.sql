@@ -120,3 +120,20 @@ WITH temptable AS (
 select admission_date, admission_day, admission_day - LAG(admission_day,1)
 	OVER() admission_count_change
     	from temptable
+
+
+
+/*Sort the province names in ascending order in such a way that the province 'Ontario' is always on top. */
+select 
+	province_name 
+    	from province_names
+        	order by case when province_name = 'Ontario' Then 0 else 1 END 
+
+/*We need a breakdown for the total amount of admissions each doctor has started each year. Show the doctor_id, doctor_full_name, specialty, year, total_admissions for that year. */
+select
+	d.doctor_id, concat(d.first_name, ' ', d.last_name) AS doctor_name, 
+    d.specialty, YEar(a.admission_date) AS selected_year, 
+    count(*) AS total_admissions
+	from admissions a JOin doctors d
+    	On a.attending_doctor_id = d.doctor_id
+        	group by d.doctor_id, d.specialty, selected_year
